@@ -6,6 +6,9 @@ import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import CircleButton from '@/components/CircleButton';
 import IconButton from '@/components/IconButton';
+import EmojiPicker from '@/components/EmojiPIcker';
+import EmojiList from '@/components/EmojiList';
+
 
 const PlaceholderImage = require('@/assets/images/background-image.png');
 
@@ -13,6 +16,8 @@ const PlaceholderImage = require('@/assets/images/background-image.png');
 export default function Index() {
   const [selectedImage, setSelectedImage] = useState<string | undefined>(undefined);
   const [showAppOptions, setShowAppOptions] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [pickedEmoji, setPickedEmoji] = useState<ImageSourcePropType | undefined>(undefined);
 
 
   const pickImageAsync = async () => {
@@ -32,12 +37,16 @@ export default function Index() {
   };
 
 
-    const onReset = () => {
+  const onReset = () => {
     setShowAppOptions(false);
   };
 
   const onAddSticker = () => {
-    // we will implement this later
+    setIsModalVisible(true);
+  };
+
+  const onModalClose = () => {
+    setIsModalVisible(false);
   };
 
   const onSaveImageAsync = async () => {
@@ -49,7 +58,7 @@ export default function Index() {
       <View style={styles.imageContainer}>
         <ImageViewer imgSource={PlaceholderImage} selectedImage={selectedImage} />
       </View>
-     {showAppOptions ? (
+      {showAppOptions ? (
         <View style={styles.optionsContainer}>
           <View style={styles.optionsRow}>
             <IconButton icon="refresh" label="Reset" onPress={onReset} />
@@ -63,6 +72,9 @@ export default function Index() {
           <Button label="Use this photo" onPress={() => setShowAppOptions(true)} />
         </View>
       )}
+      <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
+        <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose} />
+      </EmojiPicker>
       {/* <Text style={styles.text}>Home screen</Text> */}
       {/* <Link href="/about" style={styles.button}>
         Go to About screen
@@ -95,7 +107,7 @@ const styles = StyleSheet.create({
     flex: 1 / 3,
     alignItems: 'center',
   },
-   optionsContainer: {
+  optionsContainer: {
     position: 'absolute',
     bottom: 80,
   },
