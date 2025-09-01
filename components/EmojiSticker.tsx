@@ -17,8 +17,10 @@ export default function EmojiSticker({ imageSize, stickerSource }: Props) {
     .numberOfTaps(2)
     .onStart(() => {
       if (scaleImage.value !== imageSize * 2) {
+        // increase double size the image
         scaleImage.value = scaleImage.value * 2;
       } else {
+        // reduce double size the image - back to normal size
         scaleImage.value = Math.round(scaleImage.value / 2);
       }
     });
@@ -33,6 +35,7 @@ export default function EmojiSticker({ imageSize, stickerSource }: Props) {
   });
 
   const drag = Gesture.Pan().onChange(event => {
+    // updates positions as emoji is being dragged
     translateX.value += event.changeX;
     translateY.value += event.changeY;
   });
